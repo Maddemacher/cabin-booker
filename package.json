@@ -1,0 +1,16 @@
+{
+  "name": "cabin-booker",
+  "version": "0.0.0",
+  "description": "Moms cabin booker.",
+  "main": "main.js",
+  "author": "Emil Bergstr�m",
+  "dependencies": {
+    "angular-bootstrap-calendar": "^0.18.0",
+    "body-parser": "~1.5.2",
+    "express": "~4.7.2",
+    "method-override": "~2.1.2",
+    "moment": "^2.11.0",
+    "mongoose": "~3.6.2",
+    "morgan": "~1.2.2"
+  }
+}

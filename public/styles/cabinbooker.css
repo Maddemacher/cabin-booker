@@ -1,0 +1,7 @@
+@import "../../node_modules/bootstrap/dist/css/bootstrap.css";
+
+.jumbotron.selected {
+  border-style: groove;
+  border-width: 1px;
+  border-color: #3c763d;
+}
