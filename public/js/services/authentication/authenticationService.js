@@ -1,6 +1,6 @@
 app.service('authenticationService', function(sessionService){
 	return {
-		IsAuthenticated: function() { return !!sessionService.hasSession(); },
+		IsAuthenticated: function() { return sessionService.hasSession(); },
 		IsAuthorized: function(authorizedRoles) {
 			if (!angular.isArray(authorizedRoles)) {
 				authorizedRoles = [authorizedRoles];

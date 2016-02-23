@@ -1,27 +1,29 @@
 app.service('sessionService', function($rootScope, $http, $cookies, AUTH_EVENTS){
   var cookieKey = "cabinBookerSession";
-  var currentSession = $cookies.getObject(cookieKey);
 
-	var create = function (session) {
-    console.log("creating session");
-		currentSession = session;
+	function create(session) {
     $cookies.putObject(cookieKey, session, {expires : moment().add(1, 'year').toDate()});
 		$rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
 
-    return currentSession;
+    return $cookies.getObject(cookieKey);
 	};
 
-	var destroy = function () {
-    console.log("destroying session");
-    $http.delete('/api/session/' + currentSession.id);
+	function destroy() {
+    $http.delete('/api/session/' + $cookies.getObject(cookieKey).id);
 
-		currentSession = null;
     $cookies.remove(cookieKey);
 		$rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
 	};
 
+  function hasSession(){
+    var session = $cookies.getObject(cookieKey);
+    if(session)
+      return true;
+		$rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
+  }
+
   $rootScope.$on(AUTH_EVENTS.sessionValidationRequested, function(){
-    $http.get('/api/session/' + currentSession.id)
+    $http.get('/api/session/' + $cookies.getObject(cookieKey).id)
          .then(function(successData) {
             if(successData.data.valid)
             {
@@ -40,7 +42,7 @@ app.service('sessionService', function($rootScope, $http, $cookies, AUTH_EVENTS)
 	return {
 		create: create,
 		destroy: destroy,
-		hasSession: function () { return !!currentSession; },
-    getSessionRole: function () { return currentSession.userRole; }
+		hasSession: function () { return !!hasSession(); },
+    getSessionRole: function () { return $cookies.getObject(cookieKey).userRole; }
 	};
 });
