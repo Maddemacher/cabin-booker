@@ -1,19 +1,16 @@
 function LoginCtrl($scope, $http, authenticationService, sessionService){
-	$scope.credential = {
+	$scope.credentials = {
 		userName: '',
 		password: ''
 	};
 
 	$scope.login = function(credentials){
 		$http
-		.post('/cabinbooker/api/login', credentials)
+		.post('/api/login', credentials)
 		.then(function (response) {
 			if(response.data.success)
 			{
-				sessionService.create(response.data.token.id, response.data.token.user.id,
-					response.data.token.user.role);
-
-				return response.data.user;
+				return sessionService.create(response.data.session);
 			}
 			else
 			{

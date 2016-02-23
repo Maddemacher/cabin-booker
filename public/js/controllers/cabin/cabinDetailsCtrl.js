@@ -39,7 +39,7 @@ function CabinDetailsCtrl($scope, $uibModal){
 		modalInstance.result.then(
 			function (cabinDetails, startDate, endDate, memberShipNumber) {
 			//on complete
-		}, 
+		},
 		function () {
 			//on error
 		});
@@ -51,7 +51,7 @@ function CabinDetailsCtrl($scope, $uibModal){
 app.directive('cabinDetails', function(){
 	return {
 		controller: CabinDetailsCtrl,
-		templateUrl: 'public/partials/cabin/cabinDetails.html',
+		templateUrl: 'partials/cabin/cabinDetails.html',
 		restrict: 'E'
 	};
 });

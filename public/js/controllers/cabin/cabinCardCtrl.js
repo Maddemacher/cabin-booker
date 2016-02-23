@@ -7,7 +7,7 @@ function CabinCardCtrl($scope){
 app.directive('cabinCard', function(){
 	return {
 		controller: CabinCardCtrl,
-		templateUrl: 'public/partials/cabin/cabinCard.html',
+		templateUrl: 'partials/cabin/cabinCard.html',
 		restrict: 'E'
 	};
 });

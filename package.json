@@ -1,6 +1,8 @@
 {
   "name": "cabin-booker",
   "version": "0.0.0",
+  "repository": "https://github.com/Maddemacher/cabin-booker",
+  "license": "",
   "description": "Moms cabin booker.",
   "main": "main.js",
   "author": "Emil Bergstr�m",
@@ -10,7 +12,7 @@
     "express": "~4.7.2",
     "method-override": "~2.1.2",
     "moment": "^2.11.0",
-    "mongoose": "~3.6.2",
+    "mongoose": "~3.8.1",
     "morgan": "~1.2.2"
   }
 }

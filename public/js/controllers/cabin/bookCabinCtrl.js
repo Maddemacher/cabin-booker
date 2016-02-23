@@ -6,23 +6,23 @@ function BookCabinCtrl($scope, $uibModalInstance, cabin, cabinService){
 
 
 	$scope.book = function () {
-		if(cabinService.BookCabin({
+		if(cabinService.bookCabin({
 			Renter: {
 				socialSecurityNumber: $scope.socialSecurityNumber,
 				name: $scope.name,
-				streetAddress = $scope.streetAddress,
+				streetAddress: $scope.streetAddress,
 				phoneNr: $scope.phoneNr,
 				email: $scope.email,
-			}
+			},
 			startDate: $scope.startDate,
-			sndDate: $scope.endDate;
+			endDate: $scope.endDate
 		})){
-			$uibModalInstance.close();	
+			$uibModalInstance.close();
 		}
 		else{
 
 		}
-		
+
 	};
 
 	$scope.cancel = function () {

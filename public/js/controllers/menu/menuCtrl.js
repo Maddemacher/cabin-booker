@@ -11,11 +11,13 @@ function MenuCtrl($scope, $rootScope, sessionService, AUTH_EVENTS){
 	$scope.logout = function(){
 		sessionService.destroy();
 	}
+
+	$rootScope.$broadcast(AUTH_EVENTS.sessionValidationRequested);
 };
 
 app.directive('menu', function(){
 	return {
-		templateUrl: 'public/partials/menu/menu.html',
+		templateUrl: 'partials/menu/menu.html',
 		restrict: 'E',
 		controller: MenuCtrl
 	};

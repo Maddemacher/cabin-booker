@@ -2,8 +2,8 @@ app.service('cabinService', function($http){
 
 	var currentCabins = [];
 
-	var BookCabin = function(bookingData) {
-		$http.post('/cabinbooker/api/book', bookingData).then(function(successData) {
+	var bookCabin = function(bookingData) {
+		$http.post('/api/book', bookingData).then(function(successData) {
 			return true;
 		},
 		function(erroData){
@@ -28,20 +28,20 @@ app.service('cabinService', function($http){
 	};
 
 	//request cabins
-	$http.get('/cabinbooker/api/cabins')
+	$http.get('/api/cabins')
 	.then(
 		function(response){
 			currentCabins.length = 0;
 			response.data.forEach(function(entry) { currentCabins.push(entry);});
-		}, 
+		},
 		function(error)
 		{
 			console.log(error);
-		});	
+		});
 
 
 	return {
-		cabins: currentCabins
-		BookCabin: BookCabin
+		cabins: currentCabins,
+		bookCabin: bookCabin
 	};
 });

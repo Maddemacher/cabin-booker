@@ -5,9 +5,9 @@ var userModel = undefined;
 function SetupUserRepo()
 {
 	var userSchema = mongoMain.handle.Schema({
-		Username : String,
-		Password: String,
-		UserRole: String
+		userName : String,
+		password: String,
+		userRole: String
 	});
 
 	userModel = mongoMain.handle.model('users', userSchema);
@@ -17,31 +17,31 @@ function SetupDefaultUser(){
 	userModel.find(function(err, user){
 		if(!user || user.length == 0){
 			CreateUser({
-				Username: 'admin',
-				Password: 'emil',
-				UserRole: 'Admin'
+				userName: 'admin',
+				password: 'emil',
+				userRole: 'admin'
 			});
 		}
 	})
 }
 
-exports.FindUserByName = function(name, onComplete, onError)
+exports.FindUserByName = function(userName, onComplete, onError)
 {
 	if(!userModel)
 	{
 		console.log("Unable to retreive user, no model");
-		return;	
-	} 
+		return;
+	}
 
-	userModel.find({ 'Username': name }, function(err, user)
+	userModel.findOne({ 'userName': userName }, function(err, user)
 	{
-		if(err)
-		{	
+		if(err || !user)
+		{
 			console.log("Unable to retreive user");
 			return onError();
 		}
 
-		return onComplete(user[0]);
+		return onComplete(user);
 	});
 };
 

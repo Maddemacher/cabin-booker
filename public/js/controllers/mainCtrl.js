@@ -1,6 +1,6 @@
-var app = angular.module('cabinBooker', ['ui.router', 'ui.bootstrap', 'mwl.calendar']);
+var app = angular.module('cabinBooker', ['ui.router', 'ui.bootstrap', 'mwl.calendar', 'ngCookies']);
 
-app.run(function($state, $rootScope, $location, authenticationService, AUTH_EVENTS){
+app.run(function($state, $rootScope, $location, authenticationService, sessionService, AUTH_EVENTS){
     $rootScope.$on(AUTH_EVENTS.loginSuccess, function(e){
     	e.preventDefault();
     	$state.go('overview');
@@ -12,10 +12,9 @@ app.run(function($state, $rootScope, $location, authenticationService, AUTH_EVEN
     })
 
     $rootScope.$on('$stateChangeStart', function(e, toState  , toParams, fromState, fromParams) {
-
         var isLogin = toState.name === "login";
         if(isLogin){
-           return; // no need to redirect 
+           return; // no need to redirect
         }
 
         // now, redirect only not authenticated
@@ -24,6 +23,10 @@ app.run(function($state, $rootScope, $location, authenticationService, AUTH_EVEN
             $state.go('login'); // go to login
         }
     });
+
+    if(sessionService.hasSession()){
+      $state.go('overview');
+    }
 });
 
 app.controller('MainCtrl', function($scope, $http){
