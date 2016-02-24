@@ -28,8 +28,8 @@ module.exports = function(config) {
       //sources
       'public/js/app.js',
       'public/js/*.js',
-      'public/js/controllers/*.js',
-      'public/js/services/**/sessionService.js',
+      'public/js/controllers/**/*.js',
+      'public/js/services/**/*.js',
 
       //tests
       'tests/*.test.js'

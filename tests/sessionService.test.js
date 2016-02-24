@@ -1,10 +1,8 @@
 "use strict";
 
 describe('sessionService', function(){
-
   beforeEach(module('cabinBooker'));
   beforeEach(function(){
-    console.log('in deps');
     module('ui.router');
     module('ngCookies');
     module('ui.bootstrap');
@@ -12,20 +10,19 @@ describe('sessionService', function(){
   });
 
   describe('create tests', function(){
-    console.log('in create tests');
-    var service;
+    var sessionService, $cookies;
 
-    beforeEach(function(){
-      console.log('** in inject **');
-      service = sessionService;
-    });
+    beforeEach(inject(function(_sessionService_, _$cookies_){
+      sessionService = _sessionService_;
+      $cookies = _$cookies_;
+    }));
 
     it('should be defined', function(){
-      expect(service).toBeDefined();
+      expect(sessionService).toBeDefined();
     });
 
     it('when create is called a cookie should be stored', function () {
-        service.create({
+        sessionService.create({
                           id : "bestId",
                           expirationDate : "bestDate",
                           userRole : "bestRole"
