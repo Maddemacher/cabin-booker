@@ -1,11 +1,15 @@
 app.service('authenticationService', function(sessionService){
+	function IsAuthenticated(){
+		return sessionService.hasSession();
+	}
+
 	return {
-		IsAuthenticated: function() { return sessionService.hasSession(); },
+		IsAuthenticated: IsAuthenticated,
 		IsAuthorized: function(authorizedRoles) {
 			if (!angular.isArray(authorizedRoles)) {
 				authorizedRoles = [authorizedRoles];
 			}
-			return (authService.isAuthenticated() && authorizedRoles.indexOf(sessionService.getSessionRole()) !== -1);
+			return (IsAuthenticated() && authorizedRoles.indexOf(sessionService.getSessionRole()) !== -1);
 		}
 	}
 });

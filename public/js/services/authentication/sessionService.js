@@ -9,16 +9,23 @@ app.service('sessionService', function($rootScope, $http, $cookies, AUTH_EVENTS)
 	};
 
 	function destroy() {
-    $http.delete('/api/session/' + $cookies.getObject(cookieKey).id);
+    var currentSession =  $cookies.getObject(cookieKey);
+
+    if(!currentSession)
+      return;
+
+    $http.delete('/api/session/' + currentSession.id);
 
     $cookies.remove(cookieKey);
 		$rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
 	};
 
   function hasSession(){
-    var session = $cookies.getObject(cookieKey);
-    if(session)
+    var currentSession = $cookies.getObject(cookieKey);
+
+    if(currentSession)
       return true;
+
 		$rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
   }
 
@@ -27,7 +34,8 @@ app.service('sessionService', function($rootScope, $http, $cookies, AUTH_EVENTS)
 
     if(!currentSession)
       return;
-      
+
+
     $http.get('/api/session/' + currentSession.id)
          .then(function(successData) {
             if(successData.data.valid)
@@ -39,7 +47,7 @@ app.service('sessionService', function($rootScope, $http, $cookies, AUTH_EVENTS)
               destroy();
             }
           },
-          function(erroData){
+          function(errorData){
               destroy();
           });
   });
