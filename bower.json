@@ -1,0 +1,30 @@
+{
+  "name": "cabin-booker",
+  "description": "Moms cabin booker.",
+  "main": "main.js",
+  "authors": [
+    "Emil Bergstr�m"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/Maddemacher/cabin-booker",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.0",
+    "angular-mocks": "^1.5.0",
+    "jquery": "^2.2.1",
+    "font-awesome": "^4.5.0",
+    "angular-ui-router": "^0.2.18",
+    "angular-cookies": "^1.5.0",
+    "angular-bootstrap-calendar": "^0.18.9",
+    "moment": "^2.11.2",
+    "angular-bootstrap": "^1.1.2"
+  }
+}

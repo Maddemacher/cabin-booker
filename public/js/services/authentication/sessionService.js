@@ -23,7 +23,12 @@ app.service('sessionService', function($rootScope, $http, $cookies, AUTH_EVENTS)
   }
 
   $rootScope.$on(AUTH_EVENTS.sessionValidationRequested, function(){
-    $http.get('/api/session/' + $cookies.getObject(cookieKey).id)
+    var currentSession = $cookies.getObject(cookieKey);
+
+    if(!currentSession)
+      return;
+      
+    $http.get('/api/session/' + currentSession.id)
          .then(function(successData) {
             if(successData.data.valid)
             {
