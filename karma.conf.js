@@ -32,7 +32,7 @@ module.exports = function(config) {
       'public/js/services/**/*.js',
 
       //tests
-      'tests/*.test.js'
+      'tests/**/*.test.js'
     ],
 
 

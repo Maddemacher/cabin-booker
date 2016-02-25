@@ -7,7 +7,7 @@ app.config(function($stateProvider, $urlRouterProvider){
 	 .state('login', {
 	 	url: "/login",
 	 	templateUrl: "/partials/authentication/login.html",
-	 	controller: LoginCtrl
+	 	controller: 'LoginCtrl'
 	 })
 
 	 .state('overview', {

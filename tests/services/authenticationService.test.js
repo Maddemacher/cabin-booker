@@ -1,6 +1,6 @@
 "use strict";
 
-describe('sessionService', function(){
+describe('authenticationService', function(){
 
   var authenticationService, $cookies, $httpBackend, $rootScope, AUTH_EVENTS, $q;
 

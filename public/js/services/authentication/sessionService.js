@@ -4,8 +4,6 @@ app.service('sessionService', function($rootScope, $http, $cookies, AUTH_EVENTS)
 	function create(session) {
     $cookies.putObject(cookieKey, session, {expires : moment().add(1, 'year').toDate()});
 		$rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-
-    return $cookies.getObject(cookieKey);
 	};
 
 	function destroy() {
@@ -35,15 +33,12 @@ app.service('sessionService', function($rootScope, $http, $cookies, AUTH_EVENTS)
     if(!currentSession)
       return;
 
-
     $http.get('/api/session/' + currentSession.id)
          .then(function(successData) {
-            if(successData.data.valid)
-            {
+            if(successData.data.valid) {
               $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
             }
-            else
-            {
+            else {
               destroy();
             }
           },
