@@ -5,11 +5,8 @@ describe('LoginCtrl', function(){
   var LoginCtrl, $scope, sessionService, $httpBackend;
 
   beforeEach(function(){
-    module('cabinBooker')
-    module('ui.router');
+    module('cabinBooker');
     module('ngCookies');
-    module('ui.bootstrap');
-    module('mwl.calendar');
   });
 
   beforeEach(inject(function($controller, _sessionService_, _$httpBackend_){

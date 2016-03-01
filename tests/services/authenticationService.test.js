@@ -5,11 +5,8 @@ describe('authenticationService', function(){
   var authenticationService, $cookies, $httpBackend, $rootScope, AUTH_EVENTS, $q;
 
   beforeEach(function(){
-    module('cabinBooker')
-    module('ui.router');
+    module('cabinBooker');
     module('ngCookies');
-    module('ui.bootstrap');
-    module('mwl.calendar');
   });
 
   beforeEach(inject(function(_authenticationService_, _$cookies_, _$httpBackend_, _$rootScope_, _AUTH_EVENTS_, _$q_){

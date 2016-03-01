@@ -3,7 +3,7 @@ app.service('cabinService', function($http){
 	var currentCabins = [];
 
 	var bookCabin = function(bookingData) {
-		$http.post('/api/book', bookingData).then(function(successData) {
+		return $http.post('/api/book', bookingData).then(function(successData) {
 			return true;
 		},
 		function(erroData){
