@@ -21,12 +21,12 @@ function SetupCabinRepo()
 			Zip: String,
 			City: String,
 			Phone: String,
-			Email: String
-		}],
-		Reserves: [{
-			PersNr: String,
-			Name: String,
-			Phone: String
+			Email: String,
+			Reserves: [{
+				PersNr: String,
+				Name: String,
+				Phone: String
+			}]
 		}],
 		Prices: [{
 			Type: String,
@@ -47,13 +47,13 @@ exports.Cabins = function(onComplete, onError)
 	if(!cabinModel)
 	{
 		console.log("Unable to retreive cabins, no model");
-		return;	
-	} 
+		return;
+	}
 
 	cabinModel.find(function(err, cabins)
 	{
 		if(err)
-		{	
+		{
 			console.log("Unable to retreive cabins");
 			return onError();
 		}
@@ -91,7 +91,7 @@ exports.DeleteCabin = function(cabinName)
 mongoMain.registerConnectionHandlers(
 	function(){
 		SetupCabinRepo();
-	}, 
+	},
 	function(){
 
 	});

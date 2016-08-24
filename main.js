@@ -9,8 +9,8 @@ var app = express();
 app.use(bodyParser.urlencoded({'extended':'true'}));
 app.use(bodyParser.json());
 
-app.use(express.static('public'));
-app.use(express.static('bower_components'));
+app.use(express.static('web/public'));
+app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 
 app.get('/', function(request, response){
 	response.sendfile('index.html');
