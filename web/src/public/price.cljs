@@ -7,21 +7,5 @@
              [public$.cabins :as cabins]))
 
 
-(defn component[]
-  [:div.col-lg-12
-   [:div.form-group.col-lg-3
-    [:label "Type"]
-    [:input.form-control {:field :text :id :first-name}]]
-
-  [:div.form-group.col-lg-3
-    [:label.control-label "StartWeek"]
-    [:input.form-control {:field :text :id :first-name}]]
-
-  [:div.form-group.col-lg-3
-    [:label.control-label "EndWeek"]
-    [:input.form-control {:field :text :id :first-name}]]
-
-  [:div.form-group.col-lg-3
-    [:label.control-label "Price"]
-    [:input.form-control {:field :text :id :first-name}]]
-   ])
+(defn component[price]
+  [:div {}])

@@ -9,7 +9,8 @@
                  [reagent "0.6.0-rc"]
                  [cljs-http "0.1.41"]
                  [org.clojure/core.async "0.2.385"]
-                 [reagent-forms "0.5.25"]]
+                 [reagent-forms "0.5.25"]
+                 [com.lucasbradstreet/cljs-uuid-utils "1.0.2"]]
 
   :plugins [[lein-cljsbuild "1.1.3"]
             [lein-figwheel "0.5.4-5"]]

@@ -10,3 +10,9 @@
 
 (defn set-current-view [new-view]
   (swap! view-state assoc :view new-view))
+
+(defn get-create-cabin-state []
+  (if (:create-cabin-state @view-state)
+    (:create-cabin-state @view-state)
+    (do (swap! view-state update-in [:create-cabin-state] #(reagent/atom {}))
+        (get-create-cabin-state))))
