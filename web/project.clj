@@ -1,4 +1,4 @@
-(defproject public "0.1.0-SNAPSHOT"
+(defproject cabinbooker "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
@@ -7,9 +7,11 @@
   :dependencies [[org.clojure/clojure "1.8.0" :scope "provided"]
                  [org.clojure/clojurescript "1.9.93" :scope "provided"]
                  [reagent "0.6.0-rc"]
+                 [re-frame "0.8.0"]
                  [cljs-http "0.1.41"]
                  [org.clojure/core.async "0.2.385"]
                  [reagent-forms "0.5.25"]
+                 [figwheel-sidecar "0.5.6"]
                  [com.lucasbradstreet/cljs-uuid-utils "1.0.2"]]
 
   :plugins [[lein-cljsbuild "1.1.3"]
@@ -22,7 +24,7 @@
    [:cljsbuild :builds :app :compiler :output-dir]
    [:cljsbuild :builds :app :compiler :output-to]]
 
-  :resource-paths ["public"]
+  :resource-paths ["src"]
 
   :figwheel {:http-server-root "public"
              :nrepl-port 7002
@@ -32,7 +34,7 @@
   :cljsbuild {:builds {:app
                        {:source-paths ["src" "env/dev/cljs"]
                         :compiler
-                        {:main "public.dev"
+                        {:main "cabinbooker.core"
                          :output-to "public/js/app.js"
                          :output-dir "public/js/out"
                          :asset-path   "js/out"
