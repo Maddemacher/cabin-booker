@@ -22,8 +22,11 @@
                            (update-in db [:state :prices] (fnil conj []) price)
                            (println " after price added " db)))
 
+(reg-event-db :save-cabin (fn [db [_ cabin]]
+                            (println "Saving cabin " cabin)))
+
+
 ;; subscriptions
 (reg-sub :view (fn [db _]
                  (println "publishing view " db)
                    {:view (:view db) :state (:state db)}))
-
