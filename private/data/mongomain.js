@@ -1,9 +1,12 @@
 var mongoose = require('mongoose');
+var args = require('../services/args.js');
 
 var connectionHandlers = [];
 var failureHandlers = [];
 
-mongoose.connect('mongodb://localhost:27017/CabinBooker', function(err) {
+var hostname = args.getArg('hostname') || "localhost";
+
+mongoose.connect(`mongodb://${hostname}:27017/CabinBooker`, function(err) {
 	if(err) {
 		console.log('connection error when connecting to repo', err);
 		failureHandlers.forEach(function(entry){
