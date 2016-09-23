@@ -5,8 +5,9 @@ MAINTAINER Emil Bergström emil.bergstrom@cygni.se
 COPY . /var/cabinbooker
 
 WORKDIR /var/cabinbooker
-	
+
 RUN npm install
+RUN bower install
 
 EXPOSE 3000
 
