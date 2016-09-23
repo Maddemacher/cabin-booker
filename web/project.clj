@@ -32,7 +32,7 @@
              :css-dirs ["public/css"]}
 
   :cljsbuild {:builds {:app
-                       {:source-paths ["src" "env/dev/cljs"]
+                       {:source-paths ["src"]
                         :compiler
                         {:main "cabinbooker.core"
                          :output-to "public/js/app.js"
@@ -42,7 +42,7 @@
                          :optimizations :none
                          :pretty-print  true}}
                        :release
-                       {:source-paths ["src" "env/prod/cljs"]
+                       {:source-paths ["src"]
                         :compiler
                         {:output-to "public/js/app.js"
                          :output-dir "public/js/release"
