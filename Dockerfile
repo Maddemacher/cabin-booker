@@ -18,6 +18,4 @@ RUN bower install --allow-root
 
 EXPOSE 3000
 
-ENV CB_MONGO_HOSTNAME cbmongo
-
-ENTRYPOINT ["npm", "start"]
+ENTRYPOINT ["npm" "run-script" "start-release"]
