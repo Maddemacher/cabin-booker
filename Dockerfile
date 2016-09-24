@@ -1,3 +1,9 @@
+#PRERES MongoDb docker container
+
+#BUILD docker build -t cabinbookernode .
+#RUN docker run -p 1337:3000 --name cabinbookernode -d --link cbmongo:mongodb cabinbookernode
+
+
 FROM node
 
 MAINTAINER Emil Bergström emil.bergstrom@cygni.se
