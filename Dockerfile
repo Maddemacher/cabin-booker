@@ -18,4 +18,4 @@ RUN bower install --allow-root
 
 EXPOSE 3000
 
-ENTRYPOINT ["npm", "run-script", "start-release"]
+ENTRYPOINT ["npm", "run-script", "start"]

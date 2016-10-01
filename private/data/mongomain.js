@@ -4,22 +4,25 @@ var args = require('../services/args.js');
 var connectionHandlers = [];
 var failureHandlers = [];
 
-var hostname = args.getArg('hostname') || "localhost";
+exports.init = function(config) {
+    const dbPath = `mongodb://${config.dbHost}:27017/${config.database}`;
 
-mongoose.connect(`mongodb://${hostname}:27017/CabinBooker`, function(err) {
-	if(err) {
-		console.log('connection error when connecting to repo', err);
-		failureHandlers.forEach(function(entry){
-			entry();
-		});
-	} else {
-		console.log('repoconnection successful');
-		connectionHandlers.forEach(function(entry){
-			entry();
-		});
-	}
-});
+    console.log(`Trying to connect to: ${dbPath}`);
 
+    mongoose.connect(dbPath, function(err) {
+	      if(err) {
+		        console.log('connection error when connecting to repo', err);
+		        failureHandlers.forEach(function(entry){
+			          entry();
+		        });
+	      } else {
+		        console.log(`Successfully connected to ${dbPath}`);
+		        connectionHandlers.forEach(function(entry){
+			          entry();
+		        });
+	      }
+    });
+};
 exports.registerConnectionHandlers = function(onComplete, onError){
 	connectionHandlers.push(onComplete);
 	failureHandlers.push(onError);

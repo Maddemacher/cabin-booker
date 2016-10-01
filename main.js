@@ -1,10 +1,23 @@
+
+var config = require(__dirname + '/private/services/configLoader.js');
+var mongoMain = require(__dirname + '/private/data/mongomain.js');
+
+console.log("config");
+console.log(config);
+
+mongoMain.init(config);
+
 var cabinRepo = require(__dirname + '/private/data/cabinrepo.js');
+
+
 var authentication = require(__dirname + '/private/authentication/authentication.js');
 
 var fs = require('fs');
 var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
+
+cabinRepo.init(config);
 
 app.use(bodyParser.urlencoded({'extended':'true'}));
 app.use(bodyParser.json());

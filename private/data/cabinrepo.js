@@ -41,6 +41,8 @@ function SetupCabinRepo()
 	cabinModel = mongoMain.handle.model('cabins', cabinSchema);
 };
 
+exports.init = function(config) {
+};
 
 exports.Cabins = function(onComplete, onError)
 {

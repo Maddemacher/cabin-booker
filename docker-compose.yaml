@@ -1,0 +1,27 @@
+# How to run:
+# docker-compouse build
+# docker-compose down
+# docker-compose up
+
+version: '2'
+
+services:
+
+ cabinbooker:
+  build:
+   context: .
+   dockerfile: Dockerfile
+  ports:
+   - "1337:3000"
+  image: node
+  networks:
+   - cbnetwork
+
+ mongodb:
+  image: mongo
+  networks:
+   - cbnetwork
+
+networks:
+ cbnetwork:
+  driver: bridge

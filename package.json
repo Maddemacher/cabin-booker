@@ -7,8 +7,7 @@
   "main": "main.js",
   "author": "Emil Bergstr�m",
   "scripts": {
-      "start": "node main.js",
-      "start-release": "node main.js --hostname cbmongo"
+      "start": "node main.js"
   },
   "dependencies": {
     "body-parser": "~1.5.2",
