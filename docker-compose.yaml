@@ -1,7 +1,7 @@
 # How to run:
-# docker-compouse build
-# docker-compose down
-# docker-compose up
+# docker-compouse -f docker-compose.development.yaml build
+# docker-compose -f docker-compose.development.yaml down
+# docker-compose -f docker-compose.development.yaml up
 
 version: '2'
 
@@ -10,10 +10,14 @@ services:
  cabinbooker:
   build:
    context: .
-   dockerfile: dockerfile.release
+   dockerfile: dockerfile
   ports:
    - "1337:3000"
   image: node
+  depends_on:
+   - elk
+  volumes:
+   - .:/var/cabinbooker
   networks:
    - cbnetwork
 
@@ -21,6 +25,25 @@ services:
   image: mongo
   networks:
    - cbnetwork
+
+ elk:
+  image: sebp/elk
+  ports:
+   - "5601:5601"
+   - "9200:9200"
+   - "5044:5044"
+   - "5000:5000"
+  networks:
+   - cbnetwork
+
+ filebeat:
+  image: prima/filebeat
+  restart: unless-stopped
+  volumes:
+   - ./filebeat.yml:/filebeat.yml
+  networks:
+   - cbnetwork
+
 
 networks:
  cbnetwork:
