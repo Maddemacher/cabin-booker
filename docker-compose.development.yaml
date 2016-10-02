@@ -1,0 +1,29 @@
+# How to run:
+# docker-compouse -f docker-compose.development.yaml build
+# docker-compose -f docker-compose.development.yaml down
+# docker-compose -f docker-compose.development.yaml up
+
+version: '2'
+
+services:
+
+ cabinbooker:
+  build:
+   context: .
+   dockerfile: dockerfile.development
+  ports:
+   - "1337:3000"
+  image: node
+  volumes:
+   - .:/var/cabinbooker
+  networks:
+   - cbnetwork
+
+ mongodb:
+  image: mongo
+  networks:
+   - cbnetwork
+
+networks:
+ cbnetwork:
+  driver: bridge

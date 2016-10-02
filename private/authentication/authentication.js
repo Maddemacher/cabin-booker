@@ -1,48 +1,72 @@
-var userRepo = require(__dirname + '/../data/userrepo.js');
-var sessionRepo = require(__dirname + '/../data/sessionrepo.js');
+const moment = require('moment');
 
-var uuid = require('node-uuid');
-var moment = require('moment');
+const q = require('q');
 
-exports.DeleteSessionById = function(sessionId){
-	return sessionRepo.DeleteSessionById(sessionId);
+const userRepo = require(`${__dirname}/../data/userrepo.js`);
+
+const sessionRepo = require(`${__dirname}/../data/sessionrepo.js`);
+
+const logger = require(`${__dirname}/../services/logger.js`);
+
+
+function deleteSession(sessionId) {
+  return sessionRepo.deleteSessionById(sessionId);
 }
 
-exports.ValidateSession = function(sessionId){
-	return sessionRepo.FindSessionById(sessionId)
-										.then(function(session){
-														console.log("found");
-														if(!session){
-															console.log("unable to locate session");
-															throw new Error("unable to locate session");
-														}
+function validateSession(sessionId) {
+  const deferred = q.defer();
 
-														console.log("is after " + moment().isAfter(session.expirationDate));
+  sessionRepo.findSessionById(sessionId).then(session => {
+    logger.log(`session found: ${session}`);
 
-														if(moment().isAfter(session.expirationDate)){
-															console.log("remove expired session");
-															sessionRepo.RemoveSessionById(data.id);
-															throw new Error("session expired");
-														}
+    if (!session) {
+      logger.log('unable to locate session');
 
-														return session;
-											});
+      deferred.reject();
+      return;
+    }
+
+    if (moment().isAfter(session.expirationDate)) {
+      logger.log('remove session : expired');
+
+      sessionRepo.removeSessionById(session.id).then(() => {
+        deferred.reject(session);
+      });
+
+      return;
+    }
+
+    deferred.resolve(session);
+  });
+
+  return deferred.promise;
 }
 
-exports.Authenticate = function(data, onLoginSuccess, onLoginFailed) {
-		userRepo.FindUserByName(data.userName, function(user){
-			if(user.password === data.password){ //ska anv'nda hashes ist'llet egentligen
+function authenticate(user) {
+  const deferred = q.defer();
 
-				sessionRepo.CreateSession(user).then(function(session) {
-					console.log("created" +session);
-					if(session)
-						onLoginSuccess(session);
-					else
-						onLoginFailed();
-				});
-			}
-			else{
-				onLoginFailed();
-			}
-	}, onLoginFailed);
-};
+  userRepo.FindUserByName(user.userName).then(persistedUser => {
+    if (user.password === persistedUser.password) { // ska anv'nda hashes ist'llet egentligen
+      sessionRepo.createSession(user).then(session => {
+        logger.log(`Session created for user ${user}, session: ${session}`);
+
+        if (session) {
+          deferred.resolve(session);
+          return;
+        }
+
+        deferred.reject();
+      });
+
+      return;
+    }
+
+    deferred.reject();
+  });
+
+  return deferred.promise;
+}
+
+exports.deleteSession = deleteSession;
+exports.validateSession = validateSession;
+exports.authenticate = authenticate;

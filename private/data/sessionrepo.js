@@ -1,56 +1,78 @@
-var mongoMain = require(__dirname + '/mongomain.js');
-var uuid = require('node-uuid');
-var Q = require('q')
-var moment = require('moment');
+const mongoMain = require(`${__dirname}/mongomain.js`);
 
-var sessionModel = undefined;
+const logger = require(`${__dirname}/../services/logger.js`);
 
-function SetupSessionRepo(){
-	var sessionSchema = mongoMain.handle.Schema(
-    {
-      id : String,
-      expirationDate : String,
-      userRole : String
-  	});
-	sessionModel = mongoMain.handle.model('sessions', sessionSchema);
-}
+const q = require('q');
 
-function FindSessionById(id)
-{
-	return sessionModel.findOne({ 'id': id }).exec();
-}
+const moment = require('moment');
 
-function GetExpirationDate(){
-  return moment().add(1, 'hour').toISOString();
-}
+const session = require(`${__dirname}/models/session.js`);
 
-function CreateSession(user){
-  var deferred = Q.defer();
+let SessionModel;
 
-  new sessionModel({id: user._id, expirationDate: GetExpirationDate(), userRole: user.userRole})
-    .save(function(error, session)
-      {
-        if(error || !session){
-            deferred.reject();
-          }
-          else{
-            deferred.resolve(session);
-          }
-      });
+function findSessionById(id) {
+  logger.log(`Trying to find session with id: ${id}`);
+  const deferred = q.defer();
+
+  if (!SessionModel) {
+    logger.log(`Unable to find session with id: ${id} , No Model`);
+    deferred.reject();
+    return deferred.promise;
+  }
+
+  SessionModel.findOne({ id }, (error, foundSession) => {
+    if (error || !foundSession) {
+      logger.log(`Could not find session, error: ${error}, Id: ${id}`);
+      deferred.reject();
+      return;
+    }
+
+    deferred.resolve(foundSession);
+  });
 
   return deferred.promise;
 }
 
-function DeleteSessionById(sessionId){
-	return sessionModel.find({ 'id': sessionId }).remove().exec();
+function getExpirationDate() {
+  return moment().add(1, 'hour').toISOString();
 }
 
-exports.CreateSession = CreateSession;
-exports.FindSessionById = FindSessionById;
-exports.DeleteSessionById = DeleteSessionById;
+function createSession(user) {
+  logger.log(`Creating session for user: ${user}`);
+  const deferred = q.defer();
 
-mongoMain.registerConnectionHandlers(
-	function(){
-		SetupSessionRepo();
-	},
-  function(){});
+  if (!SessionModel) {
+    logger.log(`Unable to create session for user: ${user}, no model`);
+    deferred.reject();
+    return deferred.promise();
+  }
+
+  new SessionModel({
+    id: user._id,
+    expirationDate: getExpirationDate(),
+    userRole: user.userRole,
+  }).save((error, createdSession) => {
+    if (error || !createdSession) {
+      deferred.reject();
+      return;
+    }
+
+    deferred.resolve(createdSession);
+  });
+
+  return deferred.promise;
+}
+
+function deleteSessionById(sessionId) {
+  // TODO update with q promises
+
+  return SessionModel.find({ id: sessionId }).remove().exec();
+}
+
+exports.createSession = createSession;
+exports.findSessionById = findSessionById;
+exports.deleteSessionById = deleteSessionById;
+
+mongoMain.connectionPromise.then(() => {
+  SessionModel = session.getModel();
+});

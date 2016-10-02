@@ -1,99 +1,77 @@
-var mongoMain = require(__dirname + '/mongomain.js');
+const q = require('q');
 
-var cabinModel = undefined;
+const logger = require(`${__dirname}/../services/logger.js`);
 
-function SetupCabinMethods()
-{
+const cabin = require(`${__dirname}/models/cabin.js`);
 
-};
+const mongomain = require(`${__dirname}/mongomain.js`);
 
-function SetupCabinRepo()
-{
-	var cabinSchema = mongoMain.handle.Schema({
-		Name : String,
-		Code: String,
-		Reservations: [{
-			StartDate: Date,
-			EndDate: Date,
-			Name: String,
-			PersNr: String,
-			Street: String,
-			Zip: String,
-			City: String,
-			Phone: String,
-			Email: String,
-			Reserves: [{
-				PersNr: String,
-				Name: String,
-				Phone: String
-			}]
-		}],
-		Prices: [{
-			Type: String,
-			StartWeek: Number,
-			EndWeek: Number,
-			Price: Number
-		}]
-	});
+let CabinModel;
 
-	SetupCabinMethods();
+function all() {
+  logger.log('Retreiving all cabins');
 
-	cabinModel = mongoMain.handle.model('cabins', cabinSchema);
-};
+  const deferred = q.defer();
 
-exports.init = function(config) {
-};
+  if (!CabinModel) {
+    logger.log('Unable to retreive cabins, no model');
+    deferred.reject();
 
-exports.Cabins = function(onComplete, onError)
-{
-	if(!cabinModel)
-	{
-		console.log("Unable to retreive cabins, no model");
-		return;
-	}
+    return deferred.promise;
+  }
 
-	cabinModel.find(function(err, cabins)
-	{
-		if(err)
-		{
-			console.log("Unable to retreive cabins");
-			return onError();
-		}
+  CabinModel.find({}, (error, cabins) => {
+    if (error) {
+      logger.log(`Unable to retreive cabins error: ${error}`);
+      deferred.reject();
+      return;
+    }
 
-		return onComplete(cabins);
-	});
-};
+    deferred.resolve(cabins);
+  });
 
-exports.CreateCabin = function(cabin)
-{
-	console.log("create cabin");
-
-	if(!cabinModel)
-	{
-		return console.log("Unable to create cabin, no model");
-	}
-
-	var c = new cabinModel(cabin);
-	c.save(function(error, cabin)
-	{
-		if(error)
-		{
-			return console.log("Unable to create cabin")
-		}
-
-		return cabin;
-	});
-};
-
-exports.DeleteCabin = function(cabinName)
-{
-	console.log("delete called for: " + cabinName);
+  return deferred.promise;
 }
 
-mongoMain.registerConnectionHandlers(
-	function(){
-		SetupCabinRepo();
-	},
-	function(){
+function createCabin(cabinToCreate) {
+  logger.log(`Trying to create cabin: ${cabinToCreate}`);
 
-	});
+  const deferred = q.defer();
+
+  if (!CabinModel) {
+    logger.log(`Unable to create cabin: ${cabinToCreate} , no model`);
+    deferred.reject();
+
+    return deferred.promise;
+  }
+
+  const c = new CabinModel(cabinToCreate);
+  c.save((error, createdCabin) => {
+    if (error) {
+      logger.log(`Unable to create cabin: ${createdCabin} , error: ${error}`);
+      deferred.reject();
+      return;
+    }
+
+    deferred.resolve(createdCabin);
+  });
+
+  return deferred.promise;
+}
+
+function deleteCabin(cabinName) {
+  console.log(`delete called for cabin: ${cabinName}`);
+
+  const deferred = q.defer();
+
+  deferred.reject();
+  return deferred.promise;
+}
+
+exports.all = all;
+exports.deleteCabin = deleteCabin;
+exports.createCabin = createCabin;
+
+mongomain.connectionPromise.then(() => {
+  CabinModel = cabin.getModel();
+});

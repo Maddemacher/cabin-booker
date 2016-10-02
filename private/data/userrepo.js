@@ -1,82 +1,91 @@
-var mongoMain = require(__dirname + '/mongomain.js');
+const q = require('q');
 
-var userModel = undefined;
+const logger = require(`${__dirname}/../services/logger.js`);
 
-function SetupUserRepo()
-{
-	var userSchema = mongoMain.handle.Schema({
-		userName : String,
-		password: String,
-		userRole: String
-	});
+const mongoMain = require(`${__dirname}/mongomain.js`);
 
-	userModel = mongoMain.handle.model('users', userSchema);
-};
+const user = require(`${__dirname}/models/user.js`);
 
-function SetupDefaultUser(){
-	userModel.find(function(err, user){
-		if(!user || user.length == 0){
-			CreateUser({
-				userName: 'admin',
-				password: 'emil',
-				userRole: 'admin'
-			});
-		}
-	})
+let Model;
+
+function createUser(userToCreate) {
+  logger.log(`Trying to create user ${userToCreate}`);
+
+  const deferred = q.defer();
+
+  if (!Model) {
+    logger.log('Unable to create user, model is undefined');
+    deferred.reject();
+    return deferred.promise;
+  }
+
+  const u = new Model(userToCreate);
+  u.save((error, createdUser) => {
+    if (error) {
+      logger.log(`Unable to create user, error: ${error} , user: ${createdUser}`);
+      deferred.reject();
+      return;
+    }
+
+    deferred.resolve(createdUser);
+  });
+
+  return deferred.promise;
 }
 
-exports.FindUserByName = function(userName, onComplete, onError)
-{
-	if(!userModel)
-	{
-		console.log("Unable to retreive user, no model");
-		return;
-	}
+function setupDefaultUser() {
+  Model.find((err, foundUsers) => {
+    if (!foundUsers || foundUsers.length === 0) {
+      createUser({
+        userName: 'admin',
+        password: 'emil',
+        userRole: 'admin',
+      });
 
-	userModel.findOne({ 'userName': userName }, function(err, user)
-	{
-		if(err || !user)
-		{
-			console.log("Unable to retreive user");
-			return onError();
-		}
+      return true;
+    }
 
-		return onComplete(user);
-	});
-};
-
-var CreateUser = function(user)
-{
-	console.log("create user");
-
-	if(!userModel)
-	{
-		return console.log("Unable to create user, no model");
-	}
-
-	var user = new userModel(user);
-	user.save(function(error, user)
-	{
-		if(error)
-		{
-			return console.log("Unable to create user")
-		}
-
-		return user;
-	});
-};
-
-exports.CreateUser = CreateUser;
-
-exports.DeleteUser = function(userName)
-{
-	console.log("delete called for: " + userName);
+    return false;
+  });
 }
 
-mongoMain.registerConnectionHandlers(
-	function(){
-		SetupUserRepo();
-		SetupDefaultUser();
-	}, function(){
+exports.findUserByName = userName => {
+  logger.log(`Trying to find user with userName: ${userName}`);
 
-	});
+  const deferred = q.defer();
+
+  if (!Model) {
+    logger.log(`Unable to find user with user name: ${userName}, no model`);
+    deferred.reject();
+    return deferred.promise;
+  }
+
+  Model.findOne({ userName }, (error, foundUser) => {
+    if (error || !foundUser) {
+      logger.log(`Could not find user, error: ${error}, userName: ${userName}`);
+      deferred.reject();
+      return;
+    }
+
+    deferred.resolve(foundUser);
+  });
+
+  return deferred.promise;
+};
+
+exports.createUser = createUser;
+
+exports.deleteUser = userName => {
+  console.log(`delete called for user: ${userName}`);
+
+  const deferred = q.defer();
+
+  deferred.reject();
+
+  return deferred.promise;
+};
+
+mongoMain.connectionPromise.then(() => {
+  Model = user.getModel();
+  setupDefaultUser();
+});

@@ -10,7 +10,7 @@ services:
  cabinbooker:
   build:
    context: .
-   dockerfile: Dockerfile
+   dockerfile: dockerfile.release
   ports:
    - "1337:3000"
   image: node

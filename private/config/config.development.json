@@ -1,4 +1,4 @@
 {
-    "dbHost": "mongodb",
-    "database": "cabinBooker"
+  "dbHost": "mongodb",
+  "database": "cabinBooker"
 }

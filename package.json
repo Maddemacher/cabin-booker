@@ -7,10 +7,12 @@
   "main": "main.js",
   "author": "Emil Bergstr�m",
   "scripts": {
-      "start": "node main.js"
+    "start": "node main.js",
+    "lint": "eslint --ext .js ./private/** ./main.js"
   },
   "dependencies": {
     "body-parser": "~1.5.2",
+    "eslint-config-airbnb": "^11.2.0",
     "express": "~4.7.2",
     "method-override": "~2.1.2",
     "minimist": "^1.2.0",
@@ -18,10 +20,18 @@
     "mongoose": "~3.8.1",
     "morgan": "~1.2.2",
     "node-uuid": "^1.4.7",
-    "q": "^1.4.1"
+    "q": "^1.4.1",
+    "webpack": "^1.13.2"
   },
   "devDependencies": {
     "angular-mocks": "^1.5.0",
+    "eslint": "^3.5.0",
+    "eslint-config-airbnb": "^11.1.0",
+    "eslint-import-resolver-webpack": "^0.6.0",
+    "eslint-loader": "^1.5.0",
+    "eslint-plugin-import": "^1.15.0",
+    "eslint-plugin-jsx-a11y": "^2.2.2",
+    "eslint-plugin-react": "^6.3.0",
     "jasmine": "^2.4.1",
     "jasmine-core": "^2.4.1",
     "karma": "^0.13.21",

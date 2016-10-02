@@ -1,31 +1,35 @@
-var mongoose = require('mongoose');
-var args = require('../services/args.js');
+const mongoose = require('mongoose');
 
-var connectionHandlers = [];
-var failureHandlers = [];
+const q = require('q');
 
-exports.init = function(config) {
-    const dbPath = `mongodb://${config.dbHost}:27017/${config.database}`;
+const logger = require(`${__dirname}/../services/logger.js`);
 
-    console.log(`Trying to connect to: ${dbPath}`);
+const deferred = q.defer();
+let initialized = false;
 
-    mongoose.connect(dbPath, function(err) {
-	      if(err) {
-		        console.log('connection error when connecting to repo', err);
-		        failureHandlers.forEach(function(entry){
-			          entry();
-		        });
-	      } else {
-		        console.log(`Successfully connected to ${dbPath}`);
-		        connectionHandlers.forEach(function(entry){
-			          entry();
-		        });
-	      }
-    });
-};
-exports.registerConnectionHandlers = function(onComplete, onError){
-	connectionHandlers.push(onComplete);
-	failureHandlers.push(onError);
+function init(config) {
+  if (initialized) {
+    throw new Error('Init is already called in mongomain.js');
+  }
+
+  initialized = true;
+
+  const dbPath = `mongodb://${config.dbHost}:27017/${config.database}`;
+  logger.log(`Trying to connect to: ${dbPath}`);
+
+  mongoose.connect(dbPath, (_, error) => {
+    if (error) {
+      logger.log('connection error when connecting to repo', error);
+
+      deferred.reject();
+      return;
+    }
+
+    logger.log(`Successfully connected to ${dbPath}`);
+    deferred.resolve();
+  });
 }
 
+exports.init = init;
 exports.handle = mongoose;
+exports.connectionPromise = deferred.promise;
