@@ -27,4 +27,4 @@ RUN bower install --allow-root
 
 EXPOSE 3000
 
-ENTRYPOINT ["nodemon", "main.js"]
+ENTRYPOINT ["npm", "run-cript", "start"]

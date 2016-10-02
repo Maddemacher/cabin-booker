@@ -7,7 +7,7 @@
   "main": "main.js",
   "author": "Emil Bergstr�m",
   "scripts": {
-    "start": "node main.js",
+    "start": "nodemon main.js",
     "lint": "eslint --ext .js ./private/** ./main.js"
   },
   "dependencies": {
