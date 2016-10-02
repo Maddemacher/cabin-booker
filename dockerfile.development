@@ -27,4 +27,4 @@ RUN bower install --allow-root
 
 EXPOSE 3000
 
-ENTRYPOINT ["pm2", "start", "main.js"]
+ENTRYPOINT ["nodemon", "main.js"]
