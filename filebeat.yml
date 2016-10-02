@@ -1,0 +1,9 @@
+filebeat:
+ prospectors:
+  -
+   paths:
+    - /var/log/cabinbooker.log
+
+output:
+  logstash:
+    hosts: ["127.0.0.1:5044"]
