@@ -1,4 +1,4 @@
-const mongoMain = require(`${__dirname}/../mongoMain.js`);
+const mongoMain = require(`${__dirname}/../mongomain.js`);
 
 exports.getModel = () => {
   const cabinSchema = mongoMain.handle.Schema({
